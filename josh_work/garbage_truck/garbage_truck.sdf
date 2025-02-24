@@ -62,13 +62,11 @@
     <joint name="joint_wheel_front_left" type="revolute">
       <parent>chassis</parent>
       <child>wheel_front_left</child>
-      <axis>
-        <xyz>0 1 0</xyz>
-        <limit>
-          <lower>-1.57</lower>
-          <upper>1.57</upper>
-        </limit>
-      </axis>
+      <axis>0 0 1</axis>
+      <limit>
+        <lower>-0.6</lower>
+        <upper>0.6</upper>
+      </limit>
     </joint>
 
     <link name="wheel_center_left">
@@ -100,8 +98,10 @@
       <axis>
         <xyz>0 1 0</xyz>
         <limit>
-          <lower>-1.57</lower>
-          <upper>1.57</upper>
+          <lower>-99999</lower>
+          <upper>99999</upper>
+          <effort>400</effort>
+          <velocity>3.5</velocity>
         </limit>
       </axis>
     </joint>
@@ -135,8 +135,10 @@
       <axis>
         <xyz>0 1 0</xyz>
         <limit>
-          <lower>-1.57</lower>
-          <upper>1.57</upper>
+          <lower>-99999</lower>
+          <upper>99999</upper>
+          <effort>400</effort>
+          <velocity>3.5</velocity>
         </limit>
       </axis>
     </joint>
@@ -167,13 +169,11 @@
     <joint name="joint_wheel_front_right" type="revolute">
       <parent>chassis</parent>
       <child>wheel_front_right</child>
-      <axis>
-        <xyz>0 1 0</xyz>
-        <limit>
-          <lower>-1.57</lower>
-          <upper>1.57</upper>
-        </limit>
-      </axis>
+      <axis>0 0 1</axis>
+      <limit>
+        <lower>-0.6</lower>
+        <upper>0.6</upper>
+      </limit>
     </joint>
 
     <link name="wheel_center_right">
@@ -205,8 +205,10 @@
       <axis>
         <xyz>0 1 0</xyz>
         <limit>
-          <lower>-1.57</lower>
-          <upper>1.57</upper>
+          <lower>-99999</lower>
+          <upper>99999</upper>
+          <effort>400</effort>
+          <velocity>3.5</velocity>
         </limit>
       </axis>
     </joint>
@@ -240,8 +242,10 @@
       <axis>
         <xyz>0 1 0</xyz>
         <limit>
-          <lower>-1.57</lower>
-          <upper>1.57</upper>
+          <lower>-99999</lower>
+          <upper>99999</upper>
+          <effort>400</effort>
+          <velocity>3.5</velocity>
         </limit>
       </axis>
     </joint>
@@ -445,7 +449,7 @@
             <far>100</far>
           </clip>
         </camera>
-        <plugin name="camera_plugin" filename="libgazebo_ros_camera.so">
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
           <ros>
             <namespace>/garbage_truck</namespace>
             <remapping>image_raw:=camera/image_raw</remapping>
@@ -453,6 +457,22 @@
         </plugin>
       </sensor>
     </link>
+
+    <!-- Gazebo Plugin for Skid Steering -->
+    <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
+    <updateRate>100.0</updateRate>
+    <robotNamespace>/</robotNamespace>
+    <leftFrontJoint>joint_wheel_front_left</leftFrontJoint>
+    <rightFrontJoint>joint_wheel_front_right</rightFrontJoint>
+    <leftRearJoint>joint_wheel_back_left</leftRearJoint>
+    <rightRearJoint>joint_wheel_back_right</rightRearJoint>
+    <wheelSeparation>2</wheelSeparation>
+    <wheelDiameter>1</wheelDiameter>
+    <robotBaseFrame>chassis</robotBaseFrame>
+    <torque>400</torque>
+    <topicName>cmd_vel</topicName>
+    <broadcastTF>false</broadcastTF>
+  </plugin> 
 
   </model>
 </sdf>
