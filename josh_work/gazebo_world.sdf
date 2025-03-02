@@ -18,7 +18,7 @@
             name="gz::sim::systems::SceneBroadcaster">
         </plugin>
 
-        <light type="directional" name="sun">
+        <!-- <light type="directional" name="sun">
             <cast_shadows>true</cast_shadows>
             <pose>0 0 10 0 0 0</pose>
             <diffuse>0.8 0.8 0.8 1</diffuse>
@@ -30,7 +30,7 @@
                 <quadratic>0.001</quadratic>
             </attenuation>
             <direction>-0.5 0.1 -0.9</direction>
-        </light>
+        </light> -->
 
         <model name="ground_plane">
             <static>true</static>
@@ -161,6 +161,62 @@
             <pose>0 0 0 0 0 0</pose>  <!-- x y z roll pitch yaw -->
         </include>
 
+        <!-- Moving Forward-->
+        <plugin filename="gz-sim-triggered-publisher-system"
+                name="gz::sim::systems::TriggeredPublisher">
+            <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+                <match field="data">16777235</match>
+            </input>
+            <output type="gz.msgs.Twist" topic="/garbage_truck_vel">
+                linear: {x: 5.0}, angular: {z: 0.0}
+            </output>
+        </plugin>
+
+        <!-- Moving Backward-->
+        <plugin filename="gz-sim-triggered-publisher-system"
+                name="gz::sim::systems::TriggeredPublisher">
+            <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+                <match field="data">16777237</match>
+            </input>
+            <output type="gz.msgs.Twist" topic="/garbage_truck_vel">
+                linear: {x: -5.0}, angular: {z: 0.0}
+            </output>
+        </plugin>
+
+        <!-- Rotating Right -->
+        <plugin filename="gz-sim-triggered-publisher-system"
+                name="gz::sim::systems::TriggeredPublisher">
+            <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+                <match field="data">16777236</match>
+            </input>
+            <output type="gz.msgs.Twist" topic="/garbage_truck_vel">
+                linear: {x: 0.0}, angular: {z: -5.0}
+            </output>
+        </plugin>
+
+        <!-- Rotating Left-->
+        <plugin filename="gz-sim-triggered-publisher-system"
+                name="gz::sim::systems::TriggeredPublisher">
+            <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+                <match field="data">16777234</match>
+            </input>
+            <output type="gz.msgs.Twist" topic="/garbage_truck_vel">
+                linear: {x: 0.0}, angular: {z: 5.0}
+            </output>
+        </plugin>
+
+        <!-- Stop Moving-->
+        <plugin filename="gz-sim-triggered-publisher-system"
+                name="gz::sim::systems::TriggeredPublisher">
+            <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+                <match field="data">83</match>
+            </input>
+            <output type="gz.msgs.Twist" topic="/garbage_truck_vel">
+                linear: {x: 0.0}, angular: {z: 0.0}
+            </output>
+        </plugin>
+
+        <!-- World Items-->
         <include>
             <name>TrashCan1</name>
             <pose>14 -3 0 0 0 0</pose>
