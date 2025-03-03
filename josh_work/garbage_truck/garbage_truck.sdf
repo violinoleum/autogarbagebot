@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.10">
+
   <model name="garbage_truck">
     <static>false</static>
 
@@ -33,6 +34,15 @@
           </script>
         </material>
       </visual>
+
+      <!-- IMU Sensor -->
+      <sensor name="imu_sensor" type="imu">
+        <always_on>1</always_on>
+        <update_rate>1</update_rate>
+        <visualize>true</visualize>
+        <topic>imu</topic>
+      </sensor>
+
     </link>
 
     <!-- Car Structure -->
@@ -508,22 +518,7 @@
       </sensor>
     </link>
 
-    <!-- Gazebo Plugin for Skid Steering -->
-    <!-- <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
-    <updateRate>100.0</updateRate>
-    <robotNamespace>/</robotNamespace>
-    <leftFrontJoint>joint_wheel_front_left</leftFrontJoint>
-    <rightFrontJoint>joint_wheel_front_right</rightFrontJoint>
-    <leftRearJoint>joint_wheel_back_left</leftRearJoint>
-    <rightRearJoint>joint_wheel_back_right</rightRearJoint>
-    <wheelSeparation>2</wheelSeparation>
-    <wheelDiameter>1</wheelDiameter>
-    <robotBaseFrame>chassis</robotBaseFrame>
-    <torque>400</torque>
-    <topicName>cmd_vel</topicName>
-    <broadcastTF>false</broadcastTF>
-  </plugin>  -->
-
+  <!-- Differential Driving -->
   <plugin
       filename="gz-sim-diff-drive-system"
       name="gz::sim::systems::DiffDrive">
@@ -535,6 +530,11 @@
       <topic>garbage_truck_vel</topic>
       <max_torque>10000.0</max_torque>
       <max_velocity>100.0</max_velocity>
+  </plugin>
+
+  <!-- IMU Sensor -->
+  <plugin filename="gz-sim-imu-system"
+        name="gz::sim::systems::Imu">
   </plugin>
 
   </model>

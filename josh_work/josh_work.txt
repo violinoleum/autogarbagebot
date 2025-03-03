@@ -9,4 +9,10 @@ sudo apt-get install gz-harmonic
 ROS2 Jazzy Installation:
 https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html
 
+Source ROS2:
+source /opt/ros/jazzy/setup.bash
+
+Start gazebo to ros2 bridge:
+ros2 launch ros_gz_bridge ros_gz_bridge.launch.py bridge_name:=ros_gz_bridge config_file:=bridge.yaml
+
 Any other installations done:
