@@ -18,6 +18,16 @@
             name="gz::sim::systems::SceneBroadcaster">
         </plugin>
 
+        <!-- Set the coordinates for the world origin -->
+        <spherical_coordinates>
+            <surface_model>EARTH_WGS84</surface_model>
+            <world_frame_orientation>ENU</world_frame_orientation>
+            <latitude_deg>-22.986687</latitude_deg>
+            <longitude_deg>-43.202501</longitude_deg>
+            <elevation>0</elevation>
+            <heading_deg>0</heading_deg>
+        </spherical_coordinates>
+
         <!-- <light type="directional" name="sun">
             <cast_shadows>true</cast_shadows>
             <pose>0 0 10 0 0 0</pose>
@@ -167,7 +177,7 @@
             <input type="gz.msgs.Int32" topic="/keyboard/keypress">
                 <match field="data">16777235</match>
             </input>
-            <output type="gz.msgs.Twist" topic="/garbage_truck_vel">
+            <output type="gz.msgs.Twist" topic="/cmd_vel">
                 linear: {x: 5.0}, angular: {z: 0.0}
             </output>
         </plugin>
@@ -178,7 +188,7 @@
             <input type="gz.msgs.Int32" topic="/keyboard/keypress">
                 <match field="data">16777237</match>
             </input>
-            <output type="gz.msgs.Twist" topic="/garbage_truck_vel">
+            <output type="gz.msgs.Twist" topic="/cmd_vel">
                 linear: {x: -5.0}, angular: {z: 0.0}
             </output>
         </plugin>
@@ -189,7 +199,7 @@
             <input type="gz.msgs.Int32" topic="/keyboard/keypress">
                 <match field="data">16777236</match>
             </input>
-            <output type="gz.msgs.Twist" topic="/garbage_truck_vel">
+            <output type="gz.msgs.Twist" topic="/cmd_vel">
                 linear: {x: 0.0}, angular: {z: -5.0}
             </output>
         </plugin>
@@ -200,7 +210,7 @@
             <input type="gz.msgs.Int32" topic="/keyboard/keypress">
                 <match field="data">16777234</match>
             </input>
-            <output type="gz.msgs.Twist" topic="/garbage_truck_vel">
+            <output type="gz.msgs.Twist" topic="/cmd_vel">
                 linear: {x: 0.0}, angular: {z: 5.0}
             </output>
         </plugin>
@@ -211,7 +221,7 @@
             <input type="gz.msgs.Int32" topic="/keyboard/keypress">
                 <match field="data">83</match>
             </input>
-            <output type="gz.msgs.Twist" topic="/garbage_truck_vel">
+            <output type="gz.msgs.Twist" topic="/cmd_vel">
                 linear: {x: 0.0}, angular: {z: 0.0}
             </output>
         </plugin>

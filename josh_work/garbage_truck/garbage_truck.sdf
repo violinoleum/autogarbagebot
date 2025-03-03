@@ -43,6 +43,12 @@
         <topic>imu</topic>
       </sensor>
 
+      <sensor name="gps_sensor" type="navsat">
+        <always_on>true</always_on>
+        <update_rate>1</update_rate>
+        <topic>gps</topic>
+      </sensor>
+
     </link>
 
     <!-- Car Structure -->
@@ -527,7 +533,7 @@
       <wheel_separation>2.2</wheel_separation>
       <wheel_radius>0.5</wheel_radius>
       <odom_publish_frequency>1</odom_publish_frequency>
-      <topic>garbage_truck_vel</topic>
+      <topic>cmd_vel</topic>
       <max_torque>10000.0</max_torque>
       <max_velocity>100.0</max_velocity>
   </plugin>
@@ -535,6 +541,11 @@
   <!-- IMU Sensor -->
   <plugin filename="gz-sim-imu-system"
         name="gz::sim::systems::Imu">
+  </plugin>
+
+  <!-- GPS Sensor -->
+  <plugin filename="gz-sim-navsat-system"
+        name="gz::sim::systems::NavSat">
   </plugin>
 
   </model>

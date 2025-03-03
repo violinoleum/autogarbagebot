@@ -15,4 +15,7 @@ source /opt/ros/jazzy/setup.bash
 Start gazebo to ros2 bridge:
 ros2 launch ros_gz_bridge ros_gz_bridge.launch.py bridge_name:=ros_gz_bridge config_file:=bridge.yaml
 
+Launch gazebo world from ros2:
+ros2 launch ros_gz_sim gz_sim.launch.py gz_args:=gazebo_world.sdf
+
 Any other installations done:
