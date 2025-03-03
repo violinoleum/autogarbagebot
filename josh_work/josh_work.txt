@@ -20,6 +20,6 @@ ros2 launch ros_gz_sim gz_sim.launch.py gz_args:=gazebo_world.sdf
 
 Launch control.py: (Need to enter ros2_env environment first)
 source ~/ros2_env/bin/activate
-python3 control.py
+python3 controls.py
 
 Any other installations done:

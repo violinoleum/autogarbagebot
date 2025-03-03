@@ -48,8 +48,8 @@ class SensorCommandNode(Node):
         self.pitch = 0.0
         self.yaw = 0.0 # Used to determine curent angle
 
-        self.pid = PID(0.5, 0.002, 0.2, setpoint=90.0)
-        self.pid.output_limits = (-0.5, 0.5)  # Prevent extreme turns
+        self.pid = PID(0.5, 0.0, 1.4, setpoint=90.0)
+        self.pid.output_limits = (-1.0, 1.0)  # Prevent extreme turns
 
         # GPS Subscriber
         self.gps_subscription = self.create_subscription(
@@ -93,14 +93,36 @@ class SensorCommandNode(Node):
         self.pid.setpoint = target_angle
         self.get_logger().info(f"Turning to {target_angle} degrees")
 
-        while abs(self.yaw - target_angle) > 0.1 and rclpy.ok():
-            correction = self.pid(self.yaw)  # PID correction
-            print("Angle correction:", correction)
-            self.send_velocity(0.0, correction)  # Only turn
-            rclpy.spin_once(self, timeout_sec=0.05)  # Adds delay (50ms)  # Process IMU data
+        last_error = 0
+        overshoot_detected = False
+        stable_counter = 0  # Track how long we remain near target
 
-        self.send_velocity(0.0, 0.0)  # Stop when done
-        self.get_logger().info(f"Reached {target_angle} degrees")
+        while rclpy.ok():
+            error = self.yaw - target_angle
+            correction = self.pid(self.yaw)  # PID correction
+
+            print(f"Yaw: {self.yaw:.2f}, Target: {target_angle}, Error: {error:.2f}, Correction: {correction:.2f}")
+
+            # Stop condition: If we stay within 0.5° for 25 consecutive loops (~0.5s at 50Hz update)
+            if abs(error) < 0.5:
+                stable_counter += 1
+            else:
+                stable_counter = 0  # Reset if error goes up again
+
+            if stable_counter >= 25:
+                self.get_logger().info(f"Reached {target_angle} degrees and stabilized.")
+                self.send_velocity(0.0, 0.0)
+                break
+
+            # Overshoot Detection: Stop overshooting corrections early
+            if last_error * error < 0 and not overshoot_detected:
+                self.get_logger().info("Overshoot detected! Applying final correction.")
+                overshoot_detected = True
+
+            self.send_velocity(0.0, correction)  # Only turn
+            rclpy.spin_once(self, timeout_sec=0.1)  # Small delay (10Hz update)
+
+            last_error = error
 
     def get_acceleration(self):
         return np.sqrt(self.linear_acceleration[0]**2 + self.linear_acceleration[1]**2)
@@ -109,6 +131,8 @@ def main(args=None):
     rclpy.init(args=args)
     node = SensorCommandNode()
     first_debug = True
+    angle_achieved = False
+    double_check = False
 
     try:
         start_time = time.time()
@@ -127,9 +151,12 @@ def main(args=None):
                 if first_debug:
                     node.send_velocity(0.0, 0.0)
                     first_debug = False
-                if node.get_acceleration() < 0.01:
+                if node.get_acceleration() < 0.01 and not angle_achieved:
                     print("Yaw:", node.yaw)
                     node.turn_to_angle(-90)
+                    angle_achieved = True
+            if node.get_acceleration() < 0.01 and angle_achieved:
+                node.send_velocity(5.0, 0.0)
                 
 
             # if elapsed_time < 5:
