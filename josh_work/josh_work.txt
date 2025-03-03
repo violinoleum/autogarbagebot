@@ -18,4 +18,8 @@ ros2 launch ros_gz_bridge ros_gz_bridge.launch.py bridge_name:=ros_gz_bridge con
 Launch gazebo world from ros2:
 ros2 launch ros_gz_sim gz_sim.launch.py gz_args:=gazebo_world.sdf
 
+Launch control.py: (Need to enter ros2_env environment first)
+source ~/ros2_env/bin/activate
+python3 control.py
+
 Any other installations done:
