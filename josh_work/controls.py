@@ -5,6 +5,33 @@ from geometry_msgs.msg import Twist # Twist message for velocity control
 import time
 import numpy as np
 from simple_pid import PID
+from pyproj import Proj, Transformer
+
+##############################--GPS--##############################
+
+# Gazebo world's reference position
+REF_LAT = -22.986687
+REF_LON = -43.202501
+
+# Convert GPS to local X, Y coordinates using UTM
+proj = Proj(proj="utm", zone=23, ellps="WGS84", preserve_units=False)  # Zone 23 for Rio de Janeiro
+transformer = Transformer.from_proj("epsg:4326", proj)
+
+def gps_to_local(lat, lon):
+    """Convert GPS (lat, lon) to local (x, y) ENU coordinates."""
+    x, y = transformer.transform(lat, lon)  # Convert to UTM
+    ref_x, ref_y = transformer.transform(REF_LAT, REF_LON)  # Convert reference point
+    return x - ref_x, y - ref_y  # Return local coordinates relative to origin
+
+def compute_heading(current_x, current_y, goal_x, goal_y):
+    """Compute the heading (angle) to reach the goal, normalized to [-180, 180] degrees"""
+    # Compute angle from current position to goal
+    angle = np.arctan2(goal_y - current_y, goal_x - current_x) * (180.0 / np.pi)
+    # Normalize the angle to the range [-180, 180] degrees
+    angle = (angle + 180) % 360 - 180  # Ensures the shortest turn direction
+    return angle
+
+##############################--IMU--##############################
 
 def quaternion_to_euler_np(quat):
     """Convert quaternion to Euler angles using NumPy."""
@@ -27,6 +54,8 @@ def quaternion_to_euler_np(quat):
 
     return roll, pitch, yaw
 
+##############################--SENSOR CLASS--##############################
+
 class SensorCommandNode(Node):
     def __init__(self):
         super().__init__('sensor_command_node')
@@ -48,8 +77,8 @@ class SensorCommandNode(Node):
         self.pitch = 0.0
         self.yaw = 0.0 # Used to determine curent angle
 
-        self.pid = PID(0.5, 0.0, 1.4, setpoint=90.0)
-        self.pid.output_limits = (-1.0, 1.0)  # Prevent extreme turns
+        self.angle_pid = PID(0.5, 0.0, 1.4, setpoint=90.0)
+        self.angle_pid.output_limits = (-1.0, 1.0)  # Prevent extreme turns
 
         # GPS Subscriber
         self.gps_subscription = self.create_subscription(
@@ -60,9 +89,17 @@ class SensorCommandNode(Node):
         )
         self.gps_subscription  # Prevent unused variable warning
 
-        self.latitude = 0.0
-        self.longitude = 0.0
-        self.altitude = 0.0 # Probably not needed
+        self.current_x = 0.0
+        self.current_y = 0.0
+        self.current_heading = 0.0 # Probably not needed
+        
+        self.waypoints = [(-22.986686995251166,-43.20236528775124), (-22.986686991096352,-43.20223839264707), 
+        (-22.986686996173113,-43.20212831128807), (-22.98685326660932,-43.202122378127775), (-22.986856020149446, -43.20219976137482),
+        (-22.986858628789193,-43.202343821692544), (-22.986860228407345,-43.20243574722859), (-22.986659928978977, -43.20244469971523)]
+        self.current_waypoint_index = 0
+
+        self.speed_pid = PID(1.0, 0.01, 1.0, setpoint=0.0)
+        self.speed_pid.output_limits = (0.0, 5.0) # Speed range (min, max)
 
     def imu_callback(self, msg):
         self.get_logger().info("IMU Data Received:")
@@ -76,9 +113,7 @@ class SensorCommandNode(Node):
     def gps_callback(self, msg):
         self.get_logger().info("GPS Data Received:")
         self.get_logger().info(f"Latitude: {msg.latitude}, Longitude: {msg.longitude}, Altitude: {msg.altitude}")
-        self.latitude = msg.latitude
-        self.longitude = msg.longitude
-        self.altitude = msg.altitude
+        self.current_x, self.current_y = gps_to_local(msg.latitude, msg.longitude)
 
     def send_velocity(self, linear_x, angular_z):
         """Publishes velocity commands to Gazebo"""
@@ -88,9 +123,31 @@ class SensorCommandNode(Node):
         self.publisher_.publish(msg)
         self.get_logger().info(f'Sent Velocity: linear={msg.linear.x}, angular={msg.angular.z}')
 
+    def compute_signed_distance(self, goal_x, goal_y):
+        """Compute signed distance to the goal based on current position and heading."""
+
+        # Compute vector from current position to target
+        delta_x = goal_x - self.current_x
+        delta_y = goal_y - self.current_y
+        distance = np.sqrt(delta_x**2 + delta_y**2)  # Euclidean distance
+
+        # Compute direction to target (angle in degrees)
+        target_angle = np.arctan2(delta_y, delta_x) * (180.0 / np.pi)
+
+        # Compute signed angle difference between current heading and target direction
+        angle_diff = self.yaw - target_angle  # Yaw is vehicle's current heading
+
+        # Normalize angle to range [-180, 180] (avoids issues with wrap-around)
+        angle_diff = (angle_diff + 180) % 360 - 180
+
+        # Determine whether to move forward or backward
+        sign = 1 if abs(angle_diff) < 90 else -1  # If overshot, reverse
+
+        return sign * distance  # Positive = move forward, Negative = move backward
+
     def turn_to_angle(self, target_angle):
         """Uses PID to smoothly turn to the target angle"""
-        self.pid.setpoint = target_angle
+        self.angle_pid.setpoint = target_angle
         self.get_logger().info(f"Turning to {target_angle} degrees")
 
         last_error = 0
@@ -99,7 +156,7 @@ class SensorCommandNode(Node):
 
         while rclpy.ok():
             error = self.yaw - target_angle
-            correction = self.pid(self.yaw)  # PID correction
+            correction = self.angle_pid(self.yaw)  # PID correction
 
             print(f"Yaw: {self.yaw:.2f}, Target: {target_angle}, Error: {error:.2f}, Correction: {correction:.2f}")
 
@@ -124,6 +181,53 @@ class SensorCommandNode(Node):
 
             last_error = error
 
+    def move_to_next_waypoint(self):
+        """Moves to the next waypoint when called."""
+    
+        # Check if all waypoints are reached
+        if self.current_waypoint_index >= len(self.waypoints):
+            self.get_logger().info("All waypoints reached! Stopping.")
+            self.send_velocity(0.0, 0.0)
+            return
+
+        # Get target waypoint
+        goal_lat, goal_lon = self.waypoints[self.current_waypoint_index]
+        goal_x, goal_y = gps_to_local(goal_lat, goal_lon)
+
+        # Compute heading to waypoint
+        desired_heading = compute_heading(self.current_x, self.current_y, goal_x, goal_y)
+
+        # Call turn_to_angle() to face the waypoint
+        self.turn_to_angle(desired_heading)
+
+        # Drive towards waypoint using PID
+        while rclpy.ok():
+            # Compute distance to target
+            distance = self.compute_signed_distance(goal_x, goal_y)
+            self.get_logger().info(f"Distance from target: {distance}")
+
+            # Compute linear velocity using PID
+            self.speed_pid.setpoint = distance
+            speed = self.speed_pid(-1*distance)  # PID controls speed
+            self.get_logger().info(f"Speed sent: {speed}")
+
+            # Move towards waypoint
+            self.send_velocity(speed, 0.0)
+
+            # Stop when close enough
+            if distance < 0.5:
+                self.send_velocity(0.0, 0.0)
+                break
+
+            rclpy.spin_once(self, timeout_sec=0.1) # Small delay (10Hz update)
+
+        # Stop when arrived
+        self.send_velocity(0.0, 0.0)
+        self.get_logger().info(f"Arrived at waypoint {self.current_waypoint_index}")
+
+        # Move to next waypoint
+        self.current_waypoint_index += 1
+
     def get_acceleration(self):
         return np.sqrt(self.linear_acceleration[0]**2 + self.linear_acceleration[1]**2)
 
@@ -142,37 +246,24 @@ def main(args=None):
 
             elapsed_time = time.time() - start_time
 
-            if elapsed_time < 2:
-                pass
-            elif elapsed_time < 7:
-                node.get_logger().info("Moving Forward")
-                node.send_velocity(5.0, 0.0)
-            else:
-                if first_debug:
-                    node.send_velocity(0.0, 0.0)
-                    first_debug = False
-                if node.get_acceleration() < 0.01 and not angle_achieved:
-                    print("Yaw:", node.yaw)
-                    node.turn_to_angle(-90)
-                    angle_achieved = True
-            if node.get_acceleration() < 0.01 and angle_achieved:
-                node.send_velocity(5.0, 0.0)
-                
+            time.sleep(3)
+            node.move_to_next_waypoint()
 
-            # if elapsed_time < 5:
+            # if elapsed_time < 2:
+            #     pass
+            # elif elapsed_time < 7:
             #     node.get_logger().info("Moving Forward")
             #     node.send_velocity(5.0, 0.0)
-            # elif elapsed_time < 10:
-            #     node.get_logger().info("Moving Backwards")
-            #     node.send_velocity(-5.0, 0.0)
-            # elif elapsed_time < 15:
-            #     node.get_logger().info("Turning Right")
-            #     node.send_velocity(0.0, -5.0)
-            # elif elapsed_time < 20:
-            #     node.get_logger().info("Turning Left")
-            #     node.send_velocity(0.0, 5.0)
             # else:
-            #     start_time = time.time()
+            #     if first_debug:
+            #         node.send_velocity(0.0, 0.0)
+            #         first_debug = False
+            #     if node.get_acceleration() < 0.01 and not angle_achieved:
+            #         print("Yaw:", node.yaw)
+            #         node.turn_to_angle(-90)
+            #         angle_achieved = True
+            # if node.get_acceleration() < 0.01 and angle_achieved:
+            #     node.send_velocity(5.0, 0.0)
 
     except KeyboardInterrupt:
         pass
