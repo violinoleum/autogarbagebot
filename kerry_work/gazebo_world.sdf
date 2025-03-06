@@ -1,0 +1,309 @@
+<?xml version="1.0" ?>
+<sdf version="1.10">
+    <world name="gazebo_world">
+        <physics name="1ms" type="ignored">
+            <max_step_size>0.001</max_step_size>
+            <real_time_factor>1.0</real_time_factor>
+        </physics>
+        <plugin
+            filename="gz-sim-physics-system"
+            name="gz::sim::systems::Physics">
+        </plugin>
+        <plugin
+            filename="gz-sim-user-commands-system"
+            name="gz::sim::systems::UserCommands">
+        </plugin>
+        <plugin
+            filename="gz-sim-scene-broadcaster-system"
+            name="gz::sim::systems::SceneBroadcaster">
+        </plugin>
+
+        <!-- Set the coordinates for the world origin -->
+        <spherical_coordinates>
+            <surface_model>EARTH_WGS84</surface_model>
+            <world_frame_orientation>ENU</world_frame_orientation>
+            <latitude_deg>-22.986687</latitude_deg>
+            <longitude_deg>-43.202501</longitude_deg>
+            <elevation>0</elevation>
+            <heading_deg>0</heading_deg>
+        </spherical_coordinates>
+
+        <!-- <light type="directional" name="sun">
+            <cast_shadows>true</cast_shadows>
+            <pose>0 0 10 0 0 0</pose>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+            <attenuation>
+                <range>1000</range>
+                <constant>0.9</constant>
+                <linear>0.01</linear>
+                <quadratic>0.001</quadratic>
+            </attenuation>
+            <direction>-0.5 0.1 -0.9</direction>
+        </light> -->
+
+        <model name="ground_plane">
+            <static>true</static>
+            <!-- <link name="link">
+                <collision name="collision">
+                <geometry>
+                    <plane>
+                    <normal>0 0 1</normal>
+                    </plane>
+                </geometry>
+                </collision>
+                <visual name="visual">
+                <geometry>
+                    <plane>
+                    <normal>0 0 1</normal>
+                    <size>100 100</size>
+                    </plane>
+                </geometry>
+                <material>
+                    <ambient>0.8 0.8 0.8 1</ambient>
+                    <diffuse>0.8 0.8 0.8 1</diffuse>
+                    <specular>0.8 0.8 0.8 1</specular>
+                </material>
+                </visual>
+            </link> -->
+
+            <link name="road">
+                <pose> 21.5 -6 0 0 0 0</pose>
+                <collision name="road_collision">
+                <geometry>
+                    <plane>
+                    <normal>0 0 1</normal>
+                    </plane>
+                </geometry>
+                </collision>
+                <visual name="road_visual">
+                    <geometry>
+                        <plane>
+                        <normal>0 0 1</normal>
+                        <size> 49 38</size>
+                        </plane>
+                    </geometry>
+                <material>
+                    <script>
+                        <uri>file://media/materials/scripts/gazebo.material</uri>
+                        <name>Gazebo/Black</name>
+                    </script>
+                </material>
+                </visual>
+            </link>
+
+            <link name="main_concrete">
+                <pose> 22.5 -9.5 0 0 0 0</pose>
+                <collision name="main_concrete_collision">
+                    <geometry>
+                        <box>
+                            <size>29 15 0.1</size>
+                        </box>
+                    </geometry>
+                </collision>
+                <visual name="main_concrete_visual">
+                    <geometry>
+                        <box>
+                            <size>29 15 0.1</size>
+                        </box>
+                    </geometry>
+                <material>
+                    <script>
+                        <uri>file://media/materials/scripts/gazebo.material</uri>
+                        <name>Gazebo/Gray</name>
+                    </script>
+                </material>
+                </visual>
+            </link>
+
+            <link name="left_concrete">
+                <pose> 21.5 9.5 0 0 0 0</pose>
+                <collision name="left_concrete_collision">
+                    <geometry>
+                        <box>
+                            <size>49 7 0.1</size>
+                        </box>
+                    </geometry>
+                </collision>
+                <visual name="left_concrete_visual">
+                    <geometry>
+                        <box>
+                            <size>49 7 0.1</size>
+                        </box>
+                    </geometry>
+                <material>
+                    <script>
+                        <uri>file://media/materials/scripts/gazebo.material</uri>
+                        <name>Gazebo/Gray</name>
+                    </script>
+                </material>
+                </visual>
+            </link>
+
+            <link name="bottom_concrete">
+                <pose> -1.5 -15 0 0 0 0</pose>
+                <collision name="bottom_concrete_collision">
+                    <geometry>
+                        <box>
+                            <size>3 26 0.1</size>
+                        </box>
+                    </geometry>
+                </collision>
+                <visual name="bottom_concrete_visual">
+                    <geometry>
+                        <box>
+                            <size>3 26 0.1</size>
+                        </box>
+                    </geometry>
+                <material>
+                    <script>
+                        <uri>file://media/materials/scripts/gazebo.material</uri>
+                        <name>Gazebo/Gray</name>
+                    </script>
+                </material>
+                </visual>
+            </link>
+
+        </model>
+
+        <include>
+            <uri>model://garbage_truck</uri>
+            <pose>0 0 0 0 0 0</pose>  <!-- x y z roll pitch yaw -->
+        </include>
+
+        <!-- Moving Forward-->
+        <plugin filename="gz-sim-triggered-publisher-system"
+                name="gz::sim::systems::TriggeredPublisher">
+            <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+                <match field="data">16777235</match>
+            </input>
+            <output type="gz.msgs.Twist" topic="/cmd_vel">
+                linear: {x: 5.0}, angular: {z: 0.0}
+            </output>
+        </plugin>
+
+        <!-- Moving Backward-->
+        <plugin filename="gz-sim-triggered-publisher-system"
+                name="gz::sim::systems::TriggeredPublisher">
+            <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+                <match field="data">16777237</match>
+            </input>
+            <output type="gz.msgs.Twist" topic="/cmd_vel">
+                linear: {x: -5.0}, angular: {z: 0.0}
+            </output>
+        </plugin>
+
+        <!-- Rotating Right -->
+        <plugin filename="gz-sim-triggered-publisher-system"
+                name="gz::sim::systems::TriggeredPublisher">
+            <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+                <match field="data">16777236</match>
+            </input>
+            <output type="gz.msgs.Twist" topic="/cmd_vel">
+                linear: {x: 0.0}, angular: {z: -5.0}
+            </output>
+        </plugin>
+
+        <!-- Rotating Left-->
+        <plugin filename="gz-sim-triggered-publisher-system"
+                name="gz::sim::systems::TriggeredPublisher">
+            <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+                <match field="data">16777234</match>
+            </input>
+            <output type="gz.msgs.Twist" topic="/cmd_vel">
+                linear: {x: 0.0}, angular: {z: 5.0}
+            </output>
+        </plugin>
+
+        <!-- Stop Moving-->
+        <plugin filename="gz-sim-triggered-publisher-system"
+                name="gz::sim::systems::TriggeredPublisher">
+            <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+                <match field="data">83</match>
+            </input>
+            <output type="gz.msgs.Twist" topic="/cmd_vel">
+                linear: {x: 0.0}, angular: {z: 0.0}
+            </output>
+        </plugin>
+
+        <!-- World Items-->
+        <include>
+            <name>TrashCan1</name>
+            <pose>14 -3 0 0 0 0</pose>
+            <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/FIRST 2015 trash can </uri>
+        </include>
+
+        <include>
+            <name>TrashCan2</name>
+            <pose>28 -3 0 0 0 1</pose>
+            <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/FIRST 2015 trash can </uri>
+        </include>
+
+        <include>
+            <name>TrashCan3</name>
+            <pose>30 -16 0 0 0 2</pose>
+            <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/FIRST 2015 trash can </uri>
+        </include>
+
+        <include>
+            <name>TrashCan4</name>
+            <pose>16 -16 0 0 0 1.5</pose>
+            <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/FIRST 2015 trash can </uri>
+        </include>
+
+        <include>
+            <name>TrashCan5</name>
+            <pose>30 7 0 0 0 0.5</pose>
+            <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/FIRST 2015 trash can </uri>
+        </include>
+
+        <include>
+            <name>TrashCan6</name>
+            <pose>16 7 0 0 0 3</pose>
+            <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/FIRST 2015 trash can </uri>
+        </include>
+        
+        <include>
+            <name>House1</name>
+            <static>true</static>
+            <pose>18 -7 0 0 0 0</pose>
+            <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/House 3 </uri>
+        </include>
+
+        <include>
+            <name>House2</name>
+            <static>true</static>
+            <pose>32 -7 0 0 0 0</pose>
+            <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/House 3 </uri>
+        </include>
+
+        <include>
+            <name>House3</name>
+            <static>true</static>
+            <pose>28 -12 0 0 0 3.14159</pose>
+            <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/House 3 </uri>
+        </include>
+
+        <include>
+            <name>House4</name>
+            <static>true</static>
+            <pose>14 -12 0 0 0 3.14159</pose>
+            <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/House 3 </uri>
+        </include>
+
+        <include>
+            <name>House5</name>
+            <static>true</static>
+            <pose>14 11 0 0 0 3.14159</pose>
+            <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/House 3 </uri>
+        </include>
+
+        <include>
+            <name>House6</name>
+            <static>true</static>
+            <pose>28 11 0 0 0 3.14159</pose>
+            <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/House 3 </uri>
+        </include>
+
+    </world>
+</sdf>

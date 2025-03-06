@@ -1,0 +1,492 @@
+<sdf version='1.11'>
+  <model name='garbagebot_arm'>
+    <joint name='virtual_joint' type='fixed'>
+      <pose relative_to='__model__'>0 0 0 0 0 0</pose>
+      <parent>world</parent>
+      <child>base_link</child>
+    </joint>
+    <link name='base_link'>
+      <pose relative_to='virtual_joint'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.45000000000000001</mass>
+        <inertia>
+          <ixx>0.00093199999999999999</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.0010150000000000001</iyy>
+          <iyz>0</iyz>
+          <izz>0.001694</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_link_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>3 0.050000000000000003 1</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='base_link_fixed_joint_lump__link1_collision_1'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>3 0.050000000000000003 1</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='base_link_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>3 0.050000000000000003 1</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.5 0.5 0.5 1</ambient>
+          <diffuse>0.5 0.5 0.5 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
+        </material>
+      </visual>
+      <visual name='base_link_fixed_joint_lump__link1_visual_1'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>3 0.050000000000000003 1</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.5 0.5 0.5 1</ambient>
+          <diffuse>0.5 0.5 0.5 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
+        </material>
+      </visual>
+    </link>
+    <joint name='link1_to_link2' type='prismatic'>
+      <pose relative_to='base_link'>0 0 0 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>link2</child>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-1</lower>
+          <upper>1</upper>
+          <effort>56</effort>
+          <velocity>2.7925270000000002</velocity>
+        </limit>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='link2'>
+      <pose relative_to='link1_to_link2'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.19</mass>
+        <inertia>
+          <ixx>0.00014799999999999999</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00014799999999999999</iyy>
+          <iyz>0</iyz>
+          <izz>9.6000000000000002e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='link2_collision'>
+        <pose>0 0.050000000000000003 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.40000000000000002 0.050000000000000003 0.20000000000000001</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='link2_visual'>
+        <pose>0 0.050000000000000003 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.40000000000000002 0.050000000000000003 0.20000000000000001</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>1 1 1 1</specular>
+        </material>
+      </visual>
+    </link>
+    <joint name='link2_to_link3' type='revolute'>
+      <pose relative_to='link2'>0 0.050000000000000003 0 1.5707963267948959 0 0</pose>
+      <parent>link2</parent>
+      <child>link3</child>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>2</upper>
+          <effort>56</effort>
+          <velocity>2.7925270000000002</velocity>
+        </limit>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='link3'>
+      <pose relative_to='link2_to_link3'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.16</mass>
+        <inertia>
+          <ixx>0.00014799999999999999</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00014799999999999999</iyy>
+          <iyz>0</iyz>
+          <izz>9.6000000000000002e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='link3_collision'>
+        <pose>0 0.5 0 -1.5707963267948959 0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>1</length>
+            <radius>0.080000000000000002</radius>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='link3_visual'>
+        <pose>0 0.5 0 -1.5707963267948959 0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>1</length>
+            <radius>0.080000000000000002</radius>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>1 1 1 1</specular>
+        </material>
+      </visual>
+    </link>
+    <joint name='link3_to_link4' type='prismatic'>
+      <pose relative_to='link3'>0 0.10000000000000001 0 0 0 0</pose>
+      <parent>link3</parent>
+      <child>link4</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0.80000000000000004</upper>
+          <effort>56</effort>
+          <velocity>2.7925270000000002</velocity>
+        </limit>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='link4'>
+      <pose relative_to='link3_to_link4'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.124</mass>
+        <inertia>
+          <ixx>0.000103</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000103</iyy>
+          <iyz>0</iyz>
+          <izz>9.6000000000000002e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='link4_collision'>
+        <pose>0 0.5 0 -1.570796326794897 -1.5707963267948966 0</pose>
+        <geometry>
+          <cylinder>
+            <length>1</length>
+            <radius>0.050000000000000003</radius>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='link4_visual'>
+        <pose>0 0.5 0 -1.570796326794897 -1.5707963267948966 0</pose>
+        <geometry>
+          <cylinder>
+            <length>1</length>
+            <radius>0.050000000000000003</radius>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>1 1 1 1</specular>
+        </material>
+      </visual>
+    </link>
+    <joint name='link4_to_link6_flange' type='revolute'>
+      <pose relative_to='link4'>0 1 0 0 0 0</pose>
+      <parent>link4</parent>
+      <child>link6_flange</child>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>2</upper>
+          <effort>56</effort>
+          <velocity>2.7925270000000002</velocity>
+        </limit>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='link6_flange'>
+      <pose relative_to='link4_to_link6_flange'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0.022666666666666668 0 0 0</pose>
+        <mass>0.105</mass>
+        <inertia>
+          <ixx>5.2598333333333321e-05</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>6.0390055726013101e-05</iyy>
+          <iyz>3.3838633690937568e-08</iyz>
+          <izz>3.3992277607320211e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='link6_flange_collision'>
+        <pose>0 0 0 0 -1.5707963267948966 0</pose>
+        <geometry>
+          <cylinder>
+            <length>1</length>
+            <radius>0.050000000000000003</radius>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='link6_flange_fixed_joint_lump__gripper_base_collision_1'>
+        <pose>0 0 0.034000000000000002 1.579 0 0</pose>
+        <geometry>
+          <box>
+            <size>1 0.050000000000000003 0.050000000000000003</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='link6_flange_visual'>
+        <pose>0 0 0 0 -1.5707963267948966 0</pose>
+        <geometry>
+          <cylinder>
+            <length>1</length>
+            <radius>0.050000000000000003</radius>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.5 0.5 0.5 1</ambient>
+          <diffuse>0.5 0.5 0.5 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
+        </material>
+      </visual>
+      <visual name='link6_flange_fixed_joint_lump__gripper_base_visual_1'>
+        <pose>0 0 0.034000000000000002 1.579 0 0</pose>
+        <geometry>
+          <box>
+            <size>1 0.050000000000000003 0.050000000000000003</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>1 1 1 1</specular>
+        </material>
+      </visual>
+    </link>
+    <joint name='gripper_base_to_gripper_left' type='prismatic'>
+      <pose relative_to='link6_flange'>0 0 0.034000000000000002 1.579 0 0</pose>
+      <parent>link6_flange</parent>
+      <child>gripper_left</child>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0.5</upper>
+          <effort>56</effort>
+          <velocity>2.7925270000000002</velocity>
+        </limit>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='gripper_left'>
+      <pose relative_to='gripper_base_to_gripper_left'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.0070000000000000001</mass>
+        <inertia>
+          <ixx>9.9999999999999995e-07</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>9.9999999999999995e-07</iyy>
+          <iyz>0</iyz>
+          <izz>9.9999999999999995e-07</izz>
+        </inertia>
+      </inertial>
+      <collision name='gripper_left_collision'>
+        <pose>-0.5 0.5 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.050000000000000003 1 0.050000000000000003</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name='gripper_left_visual'>
+        <pose>-0.5 0.5 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.050000000000000003 1 0.050000000000000003</size>
+          </box>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='gripper_base_to_gripper_right' type='prismatic'>
+      <pose relative_to='link6_flange'>0 0 0.034000000000000002 1.579 0 0</pose>
+      <parent>link6_flange</parent>
+      <child>gripper_right</child>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <mimic joint='gripper_base_to_gripper_left'>
+          <multiplier>-1</multiplier>
+          <offset>0</offset>
+          <reference>0</reference>
+        </mimic>
+        <limit>
+          <lower>0</lower>
+          <upper>0.5</upper>
+          <effort>56</effort>
+          <velocity>2.7925270000000002</velocity>
+        </limit>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='gripper_right'>
+      <pose relative_to='gripper_base_to_gripper_right'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.0070000000000000001</mass>
+        <inertia>
+          <ixx>9.9999999999999995e-07</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>9.9999999999999995e-07</iyy>
+          <iyz>0</iyz>
+          <izz>9.9999999999999995e-07</izz>
+        </inertia>
+      </inertial>
+      <collision name='gripper_right_collision'>
+        <pose>0.5 0.5 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.050000000000000003 1 0.050000000000000003</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name='gripper_right_visual'>
+        <pose>0.5 0.5 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.050000000000000003 1 0.050000000000000003</size>
+          </box>
+        </geometry>
+      </visual>
+    </link>
+    <frame name='base_link_to_link1' attached_to='base_link'>
+      <pose>0 0 0 0 0 0</pose>
+    </frame>
+    <frame name='link1' attached_to='base_link_to_link1'>
+      <pose>0 0 0 0 0 0</pose>
+    </frame>
+    <frame name='link6_flange_to_gripper_base' attached_to='link6_flange'>
+      <pose>0 0 0.034000000000000002 1.579 0 0</pose>
+    </frame>
+    <frame name='gripper_base' attached_to='link6_flange_to_gripper_base'>
+      <pose>0 0 0 0 0 0</pose>
+    </frame>
+  </model>
+</sdf>
