@@ -16,7 +16,7 @@ New terminal
 sudo apt install python3.12-venv
 python3 -m venv ros2_env
 Launch control.py: (Need to enter ros2_env environment first)
-source ~/ros2_env/bin/activate
+source ros2_env/bin/activate
 python3 controls.py
 
 Any other installations done:

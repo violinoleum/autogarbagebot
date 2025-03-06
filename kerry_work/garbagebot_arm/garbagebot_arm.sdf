@@ -1,22 +1,13 @@
 <sdf version='1.11'>
   <model name='garbagebot_arm'>
-    <joint name='virtual_joint' type='fixed'>
-      <pose relative_to='__model__'>0 0 0 0 0 0</pose>
-      <parent>world</parent>
-      <child>base_link</child>
-    </joint>
     <link name='base_link'>
-      <pose relative_to='virtual_joint'>0 0 0 0 0 0</pose>
+      <pose relative_to='__model__'>0 0 0 0 0 0</pose>
       <inertial>
         <pose>0 0 0 0 0 0</pose>
-        <mass>0.45000000000000001</mass>
+        <mass>50</mass>
         <inertia>
-          <ixx>0.00093199999999999999</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0.0010150000000000001</iyy>
-          <iyz>0</iyz>
-          <izz>0.001694</izz>
+          <ixx>0.01</ixx> <iyy>0.01</iyy> <izz>0.01</izz>
+          <ixy>0.0</ixy> <ixz>0.0</ixz> <iyz>0.0</iyz>
         </inertia>
       </inertial>
       <collision name='base_link_collision'>
@@ -87,12 +78,12 @@
         <limit>
           <lower>-1</lower>
           <upper>1</upper>
-          <effort>56</effort>
-          <velocity>2.7925270000000002</velocity>
+          <effort>5000</effort>
+          <velocity>2.0</velocity>
         </limit>
         <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>1</friction>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
@@ -102,14 +93,10 @@
       <pose relative_to='link1_to_link2'>0 0 0 0 0 0</pose>
       <inertial>
         <pose>0 0 0 0 0 0</pose>
-        <mass>0.19</mass>
+        <mass>50</mass>
         <inertia>
-          <ixx>0.00014799999999999999</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0.00014799999999999999</iyy>
-          <iyz>0</iyz>
-          <izz>9.6000000000000002e-05</izz>
+          <ixx>0.01</ixx> <iyy>0.01</iyy> <izz>0.01</izz>
+          <ixy>0.0</ixy> <ixz>0.0</ixz> <iyz>0.0</iyz>
         </inertia>
       </inertial>
       <collision name='link2_collision'>
@@ -150,13 +137,13 @@
         <xyz>-1 0 0</xyz>
         <limit>
           <lower>0</lower>
-          <upper>2</upper>
-          <effort>56</effort>
-          <velocity>2.7925270000000002</velocity>
+          <upper>1.57</upper>
+          <effort>5000</effort>
+          <velocity>2.0</velocity>
         </limit>
         <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>0.5</friction>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
@@ -166,14 +153,10 @@
       <pose relative_to='link2_to_link3'>0 0 0 0 0 0</pose>
       <inertial>
         <pose>0 0 0 0 0 0</pose>
-        <mass>0.16</mass>
+        <mass>30</mass>
         <inertia>
-          <ixx>0.00014799999999999999</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0.00014799999999999999</iyy>
-          <iyz>0</iyz>
-          <izz>9.6000000000000002e-05</izz>
+          <ixx>0.01</ixx> <iyy>0.01</iyy> <izz>0.01</izz>
+          <ixy>0.0</ixy> <ixz>0.0</ixz> <iyz>0.0</iyz>
         </inertia>
       </inertial>
       <collision name='link3_collision'>
@@ -217,12 +200,12 @@
         <limit>
           <lower>0</lower>
           <upper>0.80000000000000004</upper>
-          <effort>56</effort>
-          <velocity>2.7925270000000002</velocity>
+          <effort>5000</effort>
+          <velocity>2.0</velocity>
         </limit>
         <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>1</friction>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
@@ -232,14 +215,10 @@
       <pose relative_to='link3_to_link4'>0 0 0 0 0 0</pose>
       <inertial>
         <pose>0 0 0 0 0 0</pose>
-        <mass>0.124</mass>
+        <mass>30</mass>
         <inertia>
-          <ixx>0.000103</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0.000103</iyy>
-          <iyz>0</iyz>
-          <izz>9.6000000000000002e-05</izz>
+          <ixx>0.01</ixx> <iyy>0.01</iyy> <izz>0.01</izz>
+          <ixy>0.0</ixy> <ixz>0.0</ixz> <iyz>0.0</iyz>
         </inertia>
       </inertial>
       <collision name='link4_collision'>
@@ -283,12 +262,12 @@
         <limit>
           <lower>0</lower>
           <upper>2</upper>
-          <effort>56</effort>
-          <velocity>2.7925270000000002</velocity>
+          <effort>5000</effort>
+          <velocity>2.0</velocity>
         </limit>
         <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>1</friction>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
@@ -298,14 +277,10 @@
       <pose relative_to='link4_to_link6_flange'>0 0 0 0 0 0</pose>
       <inertial>
         <pose>0 0 0.022666666666666668 0 0 0</pose>
-        <mass>0.105</mass>
+        <mass>10</mass>
         <inertia>
-          <ixx>5.2598333333333321e-05</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>6.0390055726013101e-05</iyy>
-          <iyz>3.3838633690937568e-08</iyz>
-          <izz>3.3992277607320211e-05</izz>
+          <ixx>0.01</ixx> <iyy>0.01</iyy> <izz>0.01</izz>
+          <ixy>0.0</ixy> <ixz>0.0</ixz> <iyz>0.0</iyz>
         </inertia>
       </inertial>
       <collision name='link6_flange_collision'>
@@ -378,12 +353,12 @@
         <limit>
           <lower>0</lower>
           <upper>0.5</upper>
-          <effort>56</effort>
-          <velocity>2.7925270000000002</velocity>
+          <effort>5000</effort>
+          <velocity>2.0</velocity>
         </limit>
         <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>1</friction>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
@@ -393,14 +368,10 @@
       <pose relative_to='gripper_base_to_gripper_left'>0 0 0 0 0 0</pose>
       <inertial>
         <pose>0 0 0 0 0 0</pose>
-        <mass>0.0070000000000000001</mass>
+        <mass>10</mass>
         <inertia>
-          <ixx>9.9999999999999995e-07</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>9.9999999999999995e-07</iyy>
-          <iyz>0</iyz>
-          <izz>9.9999999999999995e-07</izz>
+          <ixx>0.01</ixx> <iyy>0.01</iyy> <izz>0.01</izz>
+          <ixy>0.0</ixy> <ixz>0.0</ixz> <iyz>0.0</iyz>
         </inertia>
       </inertial>
       <collision name='gripper_left_collision'>
@@ -425,21 +396,16 @@
       <parent>link6_flange</parent>
       <child>gripper_right</child>
       <axis>
-        <xyz>1 0 0</xyz>
-        <mimic joint='gripper_base_to_gripper_left'>
-          <multiplier>-1</multiplier>
-          <offset>0</offset>
-          <reference>0</reference>
-        </mimic>
+        <xyz>-1 0 0</xyz>
         <limit>
           <lower>0</lower>
           <upper>0.5</upper>
-          <effort>56</effort>
-          <velocity>2.7925270000000002</velocity>
+          <effort>5000</effort>
+          <velocity>2.0</velocity>
         </limit>
         <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>1</friction>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
@@ -449,14 +415,10 @@
       <pose relative_to='gripper_base_to_gripper_right'>0 0 0 0 0 0</pose>
       <inertial>
         <pose>0 0 0 0 0 0</pose>
-        <mass>0.0070000000000000001</mass>
+        <mass>10</mass>
         <inertia>
-          <ixx>9.9999999999999995e-07</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>9.9999999999999995e-07</iyy>
-          <iyz>0</iyz>
-          <izz>9.9999999999999995e-07</izz>
+          <ixx>0.01</ixx> <iyy>0.01</iyy> <izz>0.01</izz>
+          <ixy>0.0</ixy> <ixz>0.0</ixz> <iyz>0.0</iyz>
         </inertia>
       </inertial>
       <collision name='gripper_right_collision'>

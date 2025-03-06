@@ -168,7 +168,7 @@
 
         <include>
             <uri>model://garbage_truck</uri>
-            <pose>0 0 0 0 0 0</pose>  <!-- x y z roll pitch yaw -->
+            <pose>14 1 0 0 0 0</pose>  <!-- x y z roll pitch yaw -->
         </include>
 
         <!-- Moving Forward-->
