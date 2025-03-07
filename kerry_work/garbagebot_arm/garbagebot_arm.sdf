@@ -78,8 +78,8 @@
         <limit>
           <lower>-1</lower>
           <upper>1</upper>
-          <effort>5000</effort>
-          <velocity>2.0</velocity>
+          <effort>50000</effort>
+          <velocity>4.0</velocity>
         </limit>
         <dynamics>
           <damping>1</damping>
@@ -137,9 +137,9 @@
         <xyz>-1 0 0</xyz>
         <limit>
           <lower>0</lower>
-          <upper>1.57</upper>
-          <effort>5000</effort>
-          <velocity>2.0</velocity>
+          <upper>1.571</upper>
+          <effort>50000</effort>
+          <velocity>10.0</velocity>
         </limit>
         <dynamics>
           <damping>1</damping>
@@ -200,8 +200,8 @@
         <limit>
           <lower>0</lower>
           <upper>0.80000000000000004</upper>
-          <effort>5000</effort>
-          <velocity>2.0</velocity>
+          <effort>50000</effort>
+          <velocity>4.0</velocity>
         </limit>
         <dynamics>
           <damping>1</damping>
@@ -263,11 +263,11 @@
           <lower>0</lower>
           <upper>2</upper>
           <effort>5000</effort>
-          <velocity>2.0</velocity>
+          <velocity>3.0</velocity>
         </limit>
         <dynamics>
-          <damping>1</damping>
-          <friction>1</friction>
+          <damping>0.1</damping>
+          <friction>0.1</friction>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
@@ -353,8 +353,8 @@
         <limit>
           <lower>0</lower>
           <upper>0.5</upper>
-          <effort>5000</effort>
-          <velocity>2.0</velocity>
+          <effort>50000</effort>
+          <velocity>4.0</velocity>
         </limit>
         <dynamics>
           <damping>1</damping>
@@ -381,6 +381,20 @@
             <size>0.050000000000000003 1 0.050000000000000003</size>
           </box>
         </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>50.0</mu>
+              <mu2>50.0</mu2>
+            </ode>
+          </friction>
+          <contact>
+            <ode>
+              <soft_cfm>0.5</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+            </ode>
+          </contact>
+        </surface>
       </collision>
       <visual name='gripper_left_visual'>
         <pose>-0.5 0.5 0 0 0 0</pose>
@@ -389,6 +403,12 @@
             <size>0.050000000000000003 1 0.050000000000000003</size>
           </box>
         </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Orange</name>
+          </script>
+        </material>
       </visual>
     </link>
     <joint name='gripper_base_to_gripper_right' type='prismatic'>
@@ -400,8 +420,8 @@
         <limit>
           <lower>0</lower>
           <upper>0.5</upper>
-          <effort>5000</effort>
-          <velocity>2.0</velocity>
+          <effort>50000</effort>
+          <velocity>4.0</velocity>
         </limit>
         <dynamics>
           <damping>1</damping>
@@ -428,6 +448,20 @@
             <size>0.050000000000000003 1 0.050000000000000003</size>
           </box>
         </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>50.0</mu>
+              <mu2>50.0</mu2>
+            </ode>
+          </friction>
+          <contact>
+            <ode>
+              <soft_cfm>0.5</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+            </ode>
+          </contact>
+        </surface>
       </collision>
       <visual name='gripper_right_visual'>
         <pose>0.5 0.5 0 0 0 0</pose>
@@ -436,6 +470,12 @@
             <size>0.050000000000000003 1 0.050000000000000003</size>
           </box>
         </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Orange</name>
+          </script>
+        </material>
       </visual>
     </link>
     <frame name='base_link_to_link1' attached_to='base_link'>

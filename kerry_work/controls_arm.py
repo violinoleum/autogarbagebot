@@ -53,13 +53,37 @@ class JointCommandNode(Node):
         self.get_logger().info(f"Moving to joint position: {str(desired_joint_positions)}")
         while rclpy.ok():
             self.joint_positions = desired_joint_positions
-            self.send_joint_positions()
+            
             # TODO: check joint states
-            rclpy.spin_once(self, timeout_sec=expected_time) # delay
+            for x in range(int(expected_time)):
+                self.send_joint_positions()
+                rclpy.spin_once(self, timeout_sec=1) # delay
             break
 
         self.get_logger().info(f"Moved to joint position: {str(desired_joint_positions)}")
 
+
+# class CameraCommandNode(Node):
+#     def __init__(self):
+#         super().__init__('camera_command_node')
+
+#         # Camera Subscriber
+#         self.camera_subscription = self.create_subscription(
+#             DepthCameraSensor,
+#             '/depthcamerasensor',  # Make sure this matches your ROS 2 IMU topic name
+#             self.camera_callback,
+#             10  # QoS (queue size)
+#         )
+#         self.camera_subscription  # Prevent unused variable warning
+
+#     def camera_callback(self, msg):
+#         self.get_logger().info("Camera Data Received:")
+#         # self.get_logger().info(f"Linear Acceleration: x={msg.linear_acceleration.x}, y={msg.linear_acceleration.y}, z={msg.linear_acceleration.z}")
+#         # self.get_logger().info(f"Angular Velocity: x={msg.angular_velocity.x}, y={msg.angular_velocity.y}, z={msg.angular_velocity.z}")
+#         self.linear_acceleration = [msg.linear_acceleration.x, msg.linear_acceleration.y, msg.linear_acceleration.z]
+#         self.angular_velocity = [msg.angular_velocity.x, msg.linear_acceleration.y, msg.linear_acceleration.z]
+#         self.roll, self.pitch, self.yaw = quaternion_to_euler_np(msg.orientation)
+#         self.get_logger().info(f"Angle: roll={self.roll}, pitch={self.pitch}, yaw={self.yaw}")
 
 def main(args=None):
     rclpy.init(args=args)
@@ -70,6 +94,8 @@ def main(args=None):
 
     garbage_bin_pos = 0.0
     garbage_bin_depth = 0.8
+    garbage_bin_width = 0.45
+    grip_width = (1.0 - garbage_bin_width) / 2.0
 
     print("Starting garbage retrieval...")
 
@@ -81,28 +107,28 @@ def main(args=None):
 
             elapsed_time = time.time() - start_time
             
-            aligned_level_position = [garbage_bin_pos, 1.57, 0.0, 1.57, 0.0, 0.0]
-            open_grasping_position = [garbage_bin_pos, 1.57, garbage_bin_depth, 1.57, 0.0, 0.0]
-            closed_grasping_position = [garbage_bin_pos, 1.57, garbage_bin_depth, 1.57, 0.4, 0.4]
-            dumping_position = [garbage_bin_pos, 0.0, 0.8, 1.57, 0.4, 0.4]
-            returning_position = [garbage_bin_pos, 1.57, garbage_bin_depth, 1.57, 0.4, 0.4]
+            aligned_level_position = [garbage_bin_pos, 1.57, 0.0, 2.0, 0.0, 0.0]
+            open_grasping_position = [garbage_bin_pos, 1.57, garbage_bin_depth, 2.0, 0.0, 0.0]
+            closed_grasping_position = [garbage_bin_pos, 1.57, garbage_bin_depth, 2.0, grip_width, grip_width]
+            dumping_position = [garbage_bin_pos, 0.0, 0.8, 2.0, grip_width, grip_width]
+            returning_position = [garbage_bin_pos, 1.57, garbage_bin_depth, 2.0, grip_width, grip_width]
             rest_position = [0.0, 0.0, 0.8, 0.0, 0.0, 0.0]
             print("rest_position")
             node.move_to_joint_position(rest_position, 1)
             print("aligned_level_position")
-            node.move_to_joint_position(aligned_level_position, 15)
+            node.move_to_joint_position(aligned_level_position, 10)
             print("open_grasping_position")
-            node.move_to_joint_position(open_grasping_position, 8)
+            node.move_to_joint_position(open_grasping_position, 6)
             print("closed_grasping_position")
-            node.move_to_joint_position(closed_grasping_position, 8)
+            node.move_to_joint_position(closed_grasping_position, 6)
             print("dumping_position")
-            node.move_to_joint_position(dumping_position, 15)
+            node.move_to_joint_position(dumping_position, 10)
             print("returning_position")
-            node.move_to_joint_position(returning_position, 15)
+            node.move_to_joint_position(returning_position, 8)
             print("open_grasping_position")
-            node.move_to_joint_position(open_grasping_position, 5)
+            node.move_to_joint_position(open_grasping_position, 3)
             print("rest_position")
-            node.move_to_joint_position(rest_position, 15)
+            node.move_to_joint_position(rest_position, 8)
 
     except KeyboardInterrupt:
         pass

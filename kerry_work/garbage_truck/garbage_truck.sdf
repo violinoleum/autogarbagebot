@@ -508,34 +508,6 @@
         <child>caster</child>
     </joint>
 
-    <!-- Define a link for the front camera -->
-    <link name="front_camera_link">
-      <pose>-3 0 1.5 0 0 0</pose>  <!-- Adjust position (x y z roll pitch yaw) -->
-
-      <sensor name="front_camera" type="camera">
-        <always_on>true</always_on>
-        <update_rate>30</update_rate>  <!-- 30 FPS -->
-        <camera>
-          <horizontal_fov>1.57</horizontal_fov>  <!-- Field of View (90 degrees) -->
-          <image>
-            <width>640</width>
-            <height>480</height>
-            <format>R8G8B8</format>
-          </image>
-          <clip>
-            <near>0.1</near>
-            <far>100</far>
-          </clip>
-        </camera>
-        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
-          <ros>
-            <namespace>/garbage_truck</namespace>
-            <remapping>image_raw:=camera/image_raw</remapping>
-          </ros>
-        </plugin>
-      </sensor>
-    </link>
-
   <!-- Differential Driving -->
   <plugin
       filename="gz-sim-diff-drive-system"
@@ -565,13 +537,13 @@
     name="gz::sim::systems::JointPositionController">
     <joint_name>garbagebot_arm::link1_to_link2</joint_name>
     <topic>joint_1_prismatic_pos</topic>
-    <p_gain>200.0</p_gain>
-    <i_gain>10.0</i_gain>
-    <d_gain>50.0</d_gain>
-    <i_max>100.0</i_max>
-    <i_min>-100.0</i_min>
-    <cmd_max>5000.0</cmd_max>
-    <cmd_min>0.2</cmd_min>
+    <p_gain>3000</p_gain>
+    <i_gain>100</i_gain>
+    <d_gain>1000</d_gain>
+    <i_max>1000</i_max>
+    <i_min>-1000</i_min>
+    <cmd_max>50000</cmd_max>
+    <cmd_min>-50000</cmd_min>
     <initial_position>0</initial_position>
   </plugin>
 
@@ -580,13 +552,13 @@
     name="gz::sim::systems::JointPositionController">
     <joint_name>garbagebot_arm::link2_to_link3</joint_name>
     <topic>joint_2_revolute_pos</topic>
-    <p_gain>200.0</p_gain>
-    <i_gain>10.0</i_gain>
-    <d_gain>50.0</d_gain>
-    <i_max>100.0</i_max>
-    <i_min>-100.0</i_min>
-    <cmd_max>5000.0</cmd_max>
-    <cmd_min>0.2</cmd_min>
+    <p_gain>3000</p_gain>
+    <i_gain>100</i_gain>
+    <d_gain>1000</d_gain>
+    <i_max>1000</i_max>
+    <i_min>-1000</i_min>
+    <cmd_max>50000</cmd_max>
+    <cmd_min>-50000</cmd_min>
     <initial_position>0</initial_position>
   </plugin>
 
@@ -595,13 +567,13 @@
     name="gz::sim::systems::JointPositionController">
     <joint_name>garbagebot_arm::link3_to_link4</joint_name>
     <topic>joint_3_prismatic_pos</topic>
-    <p_gain>200.0</p_gain>
-    <i_gain>10.0</i_gain>
-    <d_gain>50.0</d_gain>
-    <i_max>100.0</i_max>
-    <i_min>-100.0</i_min>
-    <cmd_max>5000.0</cmd_max>
-    <cmd_min>0.2</cmd_min>
+    <p_gain>3000</p_gain>
+    <i_gain>100</i_gain>
+    <d_gain>1000</d_gain>
+    <i_max>1000</i_max>
+    <i_min>-1000</i_min>
+    <cmd_max>50000</cmd_max>
+    <cmd_min>-50000</cmd_min>
     <initial_position>0</initial_position>
   </plugin>
 
@@ -610,13 +582,13 @@
     name="gz::sim::systems::JointPositionController">
     <joint_name>garbagebot_arm::link4_to_link6_flange</joint_name>
     <topic>joint_4_revolute_pos</topic>
-    <p_gain>200.0</p_gain>
-    <i_gain>10.0</i_gain>
-    <d_gain>50.0</d_gain>
-    <i_max>100.0</i_max>
-    <i_min>-100.0</i_min>
-    <cmd_max>5000.0</cmd_max>
-    <cmd_min>0.2</cmd_min>
+    <p_gain>300</p_gain>
+    <i_gain>10</i_gain>
+    <d_gain>100</d_gain>
+    <i_max>100</i_max>
+    <i_min>-100</i_min>
+    <cmd_max>5000</cmd_max>
+    <cmd_min>-5000</cmd_min>
     <initial_position>0</initial_position>
   </plugin>
 
@@ -625,13 +597,13 @@
     name="gz::sim::systems::JointPositionController">
     <joint_name>garbagebot_arm::gripper_base_to_gripper_left</joint_name>
     <topic>joint_5_prismatic_pos</topic>
-    <p_gain>200.0</p_gain>
-    <i_gain>10.0</i_gain>
-    <d_gain>50.0</d_gain>
-    <i_max>100.0</i_max>
-    <i_min>-100.0</i_min>
-    <cmd_max>5000.0</cmd_max>
-    <cmd_min>0.2</cmd_min>
+    <p_gain>3000</p_gain>
+    <i_gain>100</i_gain>
+    <d_gain>1000</d_gain>
+    <i_max>1000</i_max>
+    <i_min>-1000</i_min>
+    <cmd_max>50000</cmd_max>
+    <cmd_min>-50000</cmd_min>
     <initial_position>0</initial_position>
   </plugin>
 
@@ -640,16 +612,71 @@
     name="gz::sim::systems::JointPositionController">
     <joint_name>garbagebot_arm::gripper_base_to_gripper_right</joint_name>
     <topic>joint_6_prismatic_pos</topic>
-    <p_gain>200.0</p_gain>
-    <i_gain>10.0</i_gain>
-    <d_gain>50.0</d_gain>
-    <i_max>100.0</i_max>
-    <i_min>-100.0</i_min>
-    <cmd_max>5000.0</cmd_max>
-    <cmd_min>0.2</cmd_min>
+    <p_gain>3000</p_gain>
+    <i_gain>100</i_gain>
+    <d_gain>1000</d_gain>
+    <i_max>1000</i_max>
+    <i_min>-1000</i_min>
+    <cmd_max>50000</cmd_max>
+    <cmd_min>-50000</cmd_min>
     <initial_position>0</initial_position>
   </plugin>
 
+  <link name="rgbd_camera_link">
+    <pose>0 -1.5 0.5 0 0 -1.5707</pose>
+    <inertial>
+      <mass>0.1</mass>
+      <inertia>
+        <ixx>0.000166667</ixx>
+        <iyy>0.000166667</iyy>
+        <izz>0.000166667</izz>
+      </inertia>
+    </inertial>
+    <collision name="collision">
+      <geometry>
+        <box>
+          <size>0.2 0.2 0.2</size>
+        </box>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <box>
+          <size>0.2 0.2 0.2</size>
+        </box>
+      </geometry>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/Blue</name>
+        </script>
+      </material>
+    </visual>
+    <sensor name="rgbd_camera" type="rgbd_camera">
+      <camera>
+        <horizontal_fov>1.047</horizontal_fov>
+        <image>
+          <width>320</width>
+          <height>240</height>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100</far>
+        </clip>
+      </camera>
+      <always_on>1</always_on>
+      <update_rate>30</update_rate>
+      <visualize>true</visualize>
+      <topic>rgbd_camera</topic>
+      <enable_metrics>true</enable_metrics>
+    </sensor>
+  </link>
+
+  <joint name='right_to_rgbd_camera_link' type='fixed'>
+      <pose relative_to='right'>0 0 0 0 0 0</pose>
+      <parent>right</parent>
+      <child>rgbd_camera_link</child>
+  </joint>
 
   </model>
 </sdf>
