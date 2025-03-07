@@ -1,5 +1,4 @@
 # Kerry's directory
-# Josh's directory
 
 Source ROS2:
 source /opt/ros/jazzy/setup.bash
@@ -26,3 +25,6 @@ pip install pyproj
 pip install simple-pid
 pip install pyyaml
 pip install numpy
+pip install opencv-python
+pip install ultralytics
+pip install numpy==1.26.4 // cv_bridge only works with numpy 1.x

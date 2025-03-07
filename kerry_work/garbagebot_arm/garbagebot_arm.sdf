@@ -201,11 +201,11 @@
           <lower>0</lower>
           <upper>0.80000000000000004</upper>
           <effort>50000</effort>
-          <velocity>4.0</velocity>
+          <velocity>2.0</velocity>
         </limit>
         <dynamics>
-          <damping>1</damping>
-          <friction>1</friction>
+          <damping>0.5</damping>
+          <friction>0.5</friction>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
@@ -215,7 +215,7 @@
       <pose relative_to='link3_to_link4'>0 0 0 0 0 0</pose>
       <inertial>
         <pose>0 0 0 0 0 0</pose>
-        <mass>30</mass>
+        <mass>5</mass>
         <inertia>
           <ixx>0.01</ixx> <iyy>0.01</iyy> <izz>0.01</izz>
           <ixy>0.0</ixy> <ixz>0.0</ixz> <iyz>0.0</iyz>
@@ -490,5 +490,12 @@
     <frame name='gripper_base' attached_to='link6_flange_to_gripper_base'>
       <pose>0 0 0 0 0 0</pose>
     </frame>
+
+  <plugin
+    filename="gz-sim-joint-state-publisher-system"
+    name="gz::sim::systems::JointStatePublisher">
+    <topic>joint_states</topic>
+    <update_rate>5</update_rate>
+  </plugin>
   </model>
 </sdf>
