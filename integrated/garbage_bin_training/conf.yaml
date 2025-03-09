@@ -1,0 +1,6 @@
+path: C:\Users\Artemis\Documents\Winter 2025\garbage_bin_training
+train: images/train
+val: images/val
+
+names:
+    0: garbage_bin
