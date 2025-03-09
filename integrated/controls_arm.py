@@ -43,6 +43,8 @@ class CommandNode(Node):
         self.garbage_bin_depth = 2.0
         self.arm_depth = 0.8
 
+        self.bin_found = False
+
         self.rate = self.create_rate(1) # 1 Hz
 
         # Image Subscriber
@@ -157,6 +159,7 @@ class CommandNode(Node):
                             self.arm_depth = 0.8
                         print(f"garbage_bin_depth updated: {self.garbage_bin_depth}")
                         print(f"arm_depth updated: {self.arm_depth}")
+                    self.bin_found = True
 
                 class_id = int(box.cls[0])  # Class ID
                 label = f"{self.model.names[class_id]}: {confidence:.2f}"
@@ -192,6 +195,9 @@ class CommandNode(Node):
     def grab_garbage(self):
         garbage_bin_width = 0.45
         grip_width = (1.0 - garbage_bin_width) / 2.0
+
+        while not self.bin_found:
+            rclpy.spin_once(self, timeout_sec=0.1)
 
         print("rest_position")
         rest_position = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -235,6 +241,7 @@ class CommandNode(Node):
         self.garbage_bin_pos_x = 0.0
         self.garbage_bin_pos_y = 0.0
         self.arm_pos = 0.0
+        self.bin_found = False
 
 def main(args=None):
     rclpy.init(args=args)
