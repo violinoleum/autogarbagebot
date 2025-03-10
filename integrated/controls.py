@@ -95,13 +95,24 @@ class SensorCommandNode(Node):
         self.current_y = 0.0
         self.current_heading = 0.0 # Probably not needed
         
-        self.waypoints = [(-22.986689284981498,-43.202365479729046), (-22.98668904341614,-43.202227526499364), 
-        (-22.986686996173113,-43.20212831128807), (-22.98685326660932,-43.202122378127775), (-22.986856020149446, -43.20219976137482),
-        (-22.986858628789193,-43.202343821692544), (-22.986860228407345,-43.20243574722859), (-22.986659928978977, -43.20244469971523)]
-        self.arm_actions = [1, 1, 0, 0, 1, 1, 0, 0]
+        self.waypoints = [
+            (-22.986686843915418,-43.202364958557176), # House 1
+            (-22.986688865887537,-43.202225905237064), # House 2
+            (-22.986685240914493,-43.20210002069815), # First Corner (turn right)
+            (-22.986868062083754,-43.20209806460287), # Second Corner (turn right)
+            (-22.98686357765648,-43.20221154858844), # House 3
+            (-22.986861961414412,-43.20234522618422), # House 4
+            (-22.98686168211502,-43.20246992252178), # Third Corner (left turn)
+            (-22.986877587004628,-43.2024629309687), # Third Corner (left turn x2)
+            (-22.986885932567255,-43.20211233344233), # Second Corner (turn left)
+            (-22.98667249322756,-43.202102736467005), # First Corner (turn left)
+            (-22.98665745868786,-43.20221060262935), # House 5
+            (-22.986655275783868,-43.20234704773879), # House 6
+            (-22.986651959099575,-43.20249602272118)] # Exit
+        self.arm_actions = [1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0]
         self.current_waypoint_index = 0
 
-        self.speed_pid = PID(0.7, 0.0, 2.0, setpoint=0.0)
+        self.speed_pid = PID(0.8, 0.0, 2.0, setpoint=0.0)
         self.speed_pid.output_limits = (0.0, 5.0) # Speed range (min, max)
 
     def imu_callback(self, msg):
@@ -262,7 +273,6 @@ def main(args=None):
             if not grabbbing_trash:
                 print("Going to next waypoint")
                 node.move_to_next_waypoint()
-                # node.current_waypoint_index += 1
             
             if node.arm_actions[node.current_waypoint_index] == 1: 
                 print("Waiting to grab trash")

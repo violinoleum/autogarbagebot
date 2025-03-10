@@ -234,19 +234,19 @@
         <!-- World Items-->
         <include>
             <name>TrashCan1</name>
-            <pose>14 -3.5 0 0 0 0</pose>
+            <pose>14 -3.25 0 0 0 0</pose>
             <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/FIRST 2015 trash can </uri>
         </include>
 
         <include>
             <name>TrashCan2</name>
-            <pose>28 -3.5 0 0 0 1</pose>
+            <pose>28 -3.25 0 0 0 1</pose>
             <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/FIRST 2015 trash can </uri>
         </include>
 
         <include>
             <name>TrashCan3</name>
-            <pose>30 -15.5 0 0 0 2</pose>
+            <pose>30 -15.75 0 0 0 2</pose>
             <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/FIRST 2015 trash can </uri>
         </include>
 
@@ -258,13 +258,13 @@
 
         <include>
             <name>TrashCan5</name>
-            <pose>30 7.5 0 0 0 0.5</pose>
+            <pose>30 7.25 0 0 0 0.5</pose>
             <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/FIRST 2015 trash can </uri>
         </include>
 
         <include>
             <name>TrashCan6</name>
-            <pose>16 7.5 0 0 0 3</pose>
+            <pose>16 7.25 0 0 0 3</pose>
             <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/FIRST 2015 trash can </uri>
         </include>
         
